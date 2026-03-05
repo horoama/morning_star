@@ -5,7 +5,9 @@ export async function GET(request: Request) {
   const regionCode = searchParams.get('regionCode') || '130000'; // Default: Tokyo
 
   try {
-    const response = await fetch(`https://www.jma.go.jp/bosai/forecast/data/forecast/${regionCode}.json`);
+    const response = await fetch(`https://www.jma.go.jp/bosai/forecast/data/forecast/${regionCode}.json`, {
+      cache: 'no-store'
+    });
 
     if (!response.ok) {
       throw new Error(`Failed to fetch weather data: ${response.status}`);
