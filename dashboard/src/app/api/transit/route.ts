@@ -7,6 +7,14 @@ export async function GET(request: Request) {
   // Default URL format for Yahoo Transit (e.g., Yamanote Line)
   const transitUrl = searchParams.get('url') || 'https://transit.yahoo.co.jp/diainfo/21/0';
 
+  // Basic SSRF protection: only allow Yahoo Transit URLs
+  if (!transitUrl.startsWith('https://transit.yahoo.co.jp/')) {
+    return NextResponse.json(
+      { error: 'Invalid URL. Only transit.yahoo.co.jp is allowed.' },
+      { status: 400 }
+    );
+  }
+
   try {
     const response = await axios.get(transitUrl, {
       headers: {
